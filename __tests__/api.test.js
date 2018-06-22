@@ -7,6 +7,10 @@ import Album from '../src/models/albums.js';
 
 const mockgoose = new Mockgoose(mongoose);
 
+beforeAll((done) => {
+  done();
+});
+
 afterEach((done) => {
   mockgoose.helper.reset().then(done);
 });
