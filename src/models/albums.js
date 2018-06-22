@@ -1,10 +1,10 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
 
-var albumSchema = new Schema({
-  title:  [{type: String, required: true}],
-  artist: [{type: String, required: true}],
-  releaseYear: [{ type: Number, max: 2018 }],
+const albumSchema = new Schema({
+  title:  {type: String, required: true},
+  artist: {type: String, required: true},
+  releaseYear: { type: Number, max: 2018 },
 });
 
-export default albumSchema;
+export default mongoose.model('albums', albumSchema);
