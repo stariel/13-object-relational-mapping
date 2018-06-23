@@ -1,37 +1,25 @@
 'use strict';
 
 import express from 'express';
-import Albums from '../models/albums.js'
+import Albums from '../models/albums.js';
 const router = express.Router();
 
-/**
- * Simple method to send a JSON response (all of the API methods will use this)
- * @param res
- * @param data
- */
-
-let sendJSON = (res,data) => {
-  res.statusCode = 200;
-  res.statusMessage = 'OK';
-  res.setHeader('Content-Type', 'application/json');
-  res.write( JSON.stringify(data) );
-  res.end();
-};
-
-let serverError = (res,err) => {
-  let error = { error:err };
-  res.statusCode = 500;
-  res.statusMessage = 'Server Error';
-  res.setHeader('Content-Type', 'application/json');
-  res.write( JSON.stringify(error) );
-  res.end();
-};
+const API_URL = '/api/v1/albums';
 
 router.get('/api/v1/albums', (req,res) => {
- Albums
- .find()
- .then(albums => res.send(albums))
- .catch(err => res.sendStatus(err));
+  Albums
+    .find()
+    .then(albums => res.send(albums))
+    .catch(err => res.sendStatus(err));
+});
+
+router.post(API_URL, express.json(), (req, res) => {
+
+  // res.send(req.body);
+  Albums
+    .create(req.body)
+    .then(album => res.send(album))
+    .catch(err => res.send(err));
 });
 
 // router.get('/api/v1/cats/:id', (req,res) => {
@@ -76,7 +64,7 @@ router.get('/api/v1/albums', (req,res) => {
 //       res.end();
 //     };
 //   }
-});
+//});
 
 
 export default router;
