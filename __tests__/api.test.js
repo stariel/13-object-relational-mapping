@@ -49,6 +49,22 @@ describe('api module', () => {
 
   });
 
+  it('gets a 200 response on a good model', () => {
+    return mockRequest.get('http://localhost:3001/api/v1/albums')
+      .then(response => {
+        expect(response.statusCode).toEqual(200);
+      })
+      .catch(console.err);
+  });
+
+  it('gets a 500 response on an invalid model', () => {
+    return mockRequest.get('http://localhost:3001/api/v1/dogs')
+      .then(console.log)
+      .catch(response => {
+        expect(response.status).toEqual(500);
+      });
+  });
+
 });
 
 describe('album', () => {
@@ -75,15 +91,15 @@ describe('album', () => {
         } catch (error) {
           throw(error);
         }
-      }).catch(err => fail(err));
+      }).catch(err => console.log(err));
   });
 
-  it('should add to all singers after a post', () => {
+  it('should add to all albums after a post', () => {
 
     const albumObj = {
-      title: 'Antichrist Superstar',
-      artist: 'Marilyn Manson',
-      releaseYear: 1996,
+      title: 'Lightbulb Sun',
+      artist: 'Porcupine Tree',
+      releaseYear: 2000,
     };
 
     return mockRequest
@@ -95,131 +111,32 @@ describe('album', () => {
           .get(API_URL)
           .then(results => JSON.parse(results.text))
           .then(albums => expect(albums.length).toBe(1))
-          .catch(err => fail(err));
+          .catch(err => console.log(err));
       });
 
   });
 
+  it('should find one album by id', () => {
+
+    const albumObj = {
+      title: 'Superunknown',
+      artist: 'Soundgarden',
+      releaseYear: 1994,
+    };
+
+    return Album.create(albumObj).then(data => {
+
+      return Album.findById(data._id).then(album => {
+
+        expect(album.name).toEqual(albumObj.name);
+
+      }).catch(err => console.log(err));
+
+    }).catch(err => console.log(err));
+  });
+
 });
 
-
-
-
-
-
-
-
-
-
-
-
-//   xit('to do - delete, error codes, etc.', () => {});
-
-// });
-
-// describe('band', () => {
-
-//   it('should populate band', async () => {
-
-//     const bandObj = {
-//       name: 'Iron Maiden',
-//     };
-
-//     const ironMaiden = await Band.create(bandObj);
-
-//     expect(ironMaiden.name).toBe(bandObj.name);
-
-//     const singerObj = {
-//       name: 'Bruce Dickinson',
-//       rank: 25,
-//       band: ironMaiden._id,
-//     };
-
-//     const bruce = await Singer.create(singerObj);
-
-//     const foundBruce = await Singer
-//       .findById(bruce._id)
-//       .populate('band')
-//       .exec();
-
-//     expect(foundBruce.band.name).toBe(bandObj.name);
-
-//   });
-// });
-
-// describe('singer model', () => {
-
-//   it('Model should exist', () => {
-//     expect(Singer).toBeDefined();
-//   });
-
-//   it('should give zilch when asking for all singers first time', () => {
-
-//     return Singer.find().then(singers => {
-//       expect(singers).toEqual([]);
-//     }).catch(err => {
-//       fail(err);
-//     });
-
-//   });
-
-//   it('should create a singer', () => {
-
-//     // remember to create a rpoiut
-//     let singer = new Singer({
-//       name: 'Whitney Houston',
-//       rank: 1,
-//     });
-
-//     return singer.save().then(whitney => {
-//       expect(whitney.name).toEqual('Whitney Houston');
-//     }).catch(err => fail(err));
-//   });
-
-//   it('should get collection of created singers', () => {
-
-
-//     const singerObj = {
-//       name: 'Roy Orbison',
-//       rank: 12,
-//     };
-
-//     return Singer.create(singerObj).then(roy => {
-
-//       expect(roy.name).toBe(singerObj.name);
-//       expect(roy.rank).toBe(singerObj.rank);
-//       expect(roy._id).toBeDefined();
-
-//       return Singer.find().then(singers => {
-//         expect(singers.length).toEqual(1);
-//         expect(singers[0].name).toBe(singerObj.name);
-//       }).catch(err => {
-//         fail(err);
-//       });
-
-//     });
-
-
-
-//   });
-
-//   it('should find one by id', () => {
-
-//     const singerObj = {
-//       name: 'Barry Manilow',
-//       rank: 9999999999,
-//     };
-
-//     return Singer.create(singerObj).then(barry => {
-
-//       return Singer.findById(barry._id).then(bar => {
-
-//         expect(bar.name).toEqual(singerObj.name);
-
-//       }).catch(fail);
-
-//     }).catch(fail);
-//   });
 
 //   it('should delete a singer - async/await version', async () => {
 
