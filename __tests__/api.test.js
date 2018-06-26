@@ -49,8 +49,8 @@ describe('api module', () => {
 
   });
 
-  it('gets a 200 response on a good model', () => {
-    return mockRequest.get('http://localhost:3001/api/v1/albums')
+  it('gets a 200 response on an existing model', () => {
+    return mockRequest.get(API_URL)
       .then(response => {
         expect(response.statusCode).toEqual(200);
       })
@@ -58,11 +58,45 @@ describe('api module', () => {
   });
 
   it('gets a 500 response on an invalid model', () => {
-    return mockRequest.get('http://localhost:3001/api/v1/dogs')
+    return mockRequest.get('/api/v1/dogs')
       .then(console.log)
       .catch(response => {
         expect(response.status).toEqual(500);
       });
+  });
+
+
+  it('handles an invalid get request with a 404', () => {
+
+    return mockRequest.get('/blah')
+      .then()
+      .catch(res => expect(res.status).toEqual(404));
+
+  });
+  it('handles an invalid get request with a 404', () => {
+
+    return mockRequest.get('/api/v1/albums/blah')
+      .then()
+      .catch(res => expect(res.status).toEqual(404));
+
+  });
+
+  it(' on POST should respond with bad request if no request body was provided', () => {
+    return mockRequest.post(API_URL)
+      .catch(response => {
+        expect(response.statusCode).toEqual(400);
+      })
+      .catch(console.err);
+  });
+
+  it('on POST should respond with bad request if request body was invalid', () => {
+    let obj = {};
+    return mockRequest.post(API_URL)
+      .send(obj)
+      .catch(response => {
+        expect(response.statusCode).toEqual(400);
+      })
+      .catch(console.err);
   });
 
 });
