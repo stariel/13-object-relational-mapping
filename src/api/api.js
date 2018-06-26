@@ -34,48 +34,11 @@ router.put(API_URL, (req, res) => {
     .catch( next );
 });
 
+router.delete(API_URL + '/:id', (req, res) => {
+  Albums
+    .findByIdAndRemove(req.params.id)
+    .then(result => res.send(result))
+    .catch(err => res.send(err));
+});
+
 export default router;
-
-// router.get('/api/v1/cats/:id', (req,res) => {
-//   if ( req.params.id ) {
-//     Cats.findOne(req.params.id)
-//       .then( data => sendJSON(res,data) )
-//       .catch( function err(res,err) {
-//         res.status = 404;
-//         res.statusMessage = 'Not Found';
-//         res.setHeader('Content-Type', 'application/json');
-//         res.write( JSON.stringify(err) );
-//         res.end();
-//       } );
-//   }
-// });
-
-// router.delete('/api/v1/cats/:id', (req,res) => {
-//   if ( req.params.id ) {
-//     Cats.deleteOne(req.params.id)
-//       .then( success => {
-//         let data = {id:req.params.id,deleted:success};
-//         sendJSON(res,data);
-//       })
-//       .catch( err => serverError(res,err) );
-//   }
-// });
-
-// router.post('/api/v1/cats', (req,res) => {
-//   if (req.body) {
-//     let record = new Cats(req.body);
-//     record.save()
-//       .then(data => sendJSON(res,data))
-//       .catch( err => serverError(res,err) );
-//   }
-//   else {
-//     (res,err) => {
-//       let error = { error:err };
-//       res.statusCode = 400;
-//       res.statusMessage = 'Bad Request';
-//       res.setHeader('Content-Type', 'application/json');
-//       res.write( JSON.stringify(error) );
-//       res.end();
-//     };
-//   }
-//});
